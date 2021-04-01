@@ -13,10 +13,21 @@ composer install
 В проекте использовались компоненты:
 
 Инструмент отладки и дебаггинга:
-* "kint-php/kint"
+```
+"kint-php/kint"
+```
+
 Система шаблонов:
-* "league/plates"
+```
+"league/plates"
+```
+
 Маршрутизатор:
-* "nikic/fast-route"
+```
+"nikic/fast-route"
+```
+
 DI контейнер:
-* "php-di/php-di"
+```
+"php-di/php-di"
+```
