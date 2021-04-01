@@ -10,23 +10,21 @@ git clone https://github.com/DenisKor2208/psychic.git
 composer install
 ```
 
-В проекте использовались компоненты:
 
+
+В проекте использовались компоненты:
 Инструмент отладки и дебаггинга:
 ```
 "kint-php/kint"
 ```
-
 Система шаблонов:
 ```
 "league/plates"
 ```
-
 Маршрутизатор:
 ```
 "nikic/fast-route"
 ```
-
 DI контейнер:
 ```
 "php-di/php-di"
