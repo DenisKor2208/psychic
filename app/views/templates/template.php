@@ -11,7 +11,7 @@
 
         <ul class="nav justify-content-end">
             <li class="nav-item">
-                <button type="button" class="btn btn-primary" onclick="window.location.href = '/clearSession';">Обнулить</button>
+                <a href="/clearSession" class="list-group-item list-group-item-action list-group-item-primary">Обнулить прогресс</a>
             </li>
         </ul>
 
