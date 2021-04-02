@@ -92,7 +92,7 @@ class PageController
     }
 
     //очистка сессии и сброс прогресса
-    private function clearSession()
+    public function clearSession()
     {
         $_SESSION = array();
 
