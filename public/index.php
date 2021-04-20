@@ -13,19 +13,20 @@ $containerBuilder->addDefinitions([
         return new Engine('../app/views');
     },
 
-]); //указываем исключения из правил
+]);
 $container = $containerBuilder->build();
 
 $templates = new League\Plates\Engine('../app/views');
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 
-    $r->addRoute('GET', '/', ['App\controller\PageController', 'questionNumber']);
-    $r->addRoute('GET', '/questionNumber', ['App\controller\PageController', 'questionNumber']);
-    $r->addRoute('GET', '/resultPage', ['App\controller\PageController', 'resultPage']);
-    $r->addRoute('GET', '/homePage', ['App\controller\PageController', 'homePage']);
+    $r->addRoute('GET', '/', ['App\classes\PageClass', 'openOnePage']);
 
-    $r->addRoute('GET', '/clearSession', ['App\controller\PageController', 'clearSession']);
+    $r->addRoute('GET', '/openOnePage', ['App\classes\PageClass', 'openOnePage']);
+    $r->addRoute('GET', '/openTwoPage', ['App\classes\PageClass', 'openTwoPage']);
+    $r->addRoute('GET', '/openThreePage', ['App\classes\PageClass', 'openThreePage']);
+
+    $r->addRoute('GET', '/clearSession', ['App\classes\PageClass', 'clearSession']);
 
 });
 

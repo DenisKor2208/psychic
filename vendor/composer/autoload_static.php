@@ -11,9 +11,14 @@ class ComposerStaticInitd0b87b484bcccdba25701f741f37f908
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         'b33e3d135e5d9e47d845c576147bda89' => __DIR__ . '/..' . '/php-di/php-di/src/functions.php',
+        '6157b075b923803e5ef157aeb43b83bd' => __DIR__ . '/..' . '/tamtamchik/simple-flash/src/function.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Tamtamchik\\SimpleFlash\\' => 23,
+        ),
         'P' => 
         array (
             'Psr\\Container\\' => 14,
@@ -45,12 +50,16 @@ class ComposerStaticInitd0b87b484bcccdba25701f741f37f908
         ),
         'A' => 
         array (
-            'App\\Controller\\' => 15,
+            'App\\Classes\\' => 12,
             'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Tamtamchik\\SimpleFlash\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tamtamchik/simple-flash/src',
+        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -83,9 +92,9 @@ class ComposerStaticInitd0b87b484bcccdba25701f741f37f908
         array (
             0 => __DIR__ . '/..' . '/php-di/php-di/src',
         ),
-        'App\\Controller\\' => 
+        'App\\Classes\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/app/controller',
+            0 => __DIR__ . '/../..' . '/app/classes',
         ),
         'App\\' => 
         array (

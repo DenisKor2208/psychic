@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Tamtamchik\\SimpleFlash\\' => array($vendorDir . '/tamtamchik/simple-flash/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'PhpDocReader\\' => array($vendorDir . '/php-di/phpdoc-reader/src/PhpDocReader'),
     'Opis\\Closure\\' => array($vendorDir . '/opis/closure/src'),
@@ -14,6 +15,6 @@ return array(
     'Invoker\\' => array($vendorDir . '/php-di/invoker/src'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'DI\\' => array($vendorDir . '/php-di/php-di/src'),
-    'App\\Controller\\' => array($baseDir . '/app/controller'),
+    'App\\Classes\\' => array($baseDir . '/app/classes'),
     'App\\' => array($baseDir . '/app'),
 );
