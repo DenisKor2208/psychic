@@ -26,17 +26,17 @@ class ValidateClass {
                         case 'type':
                             $pattern = '#^[0-9]+$#';
                                 if(!preg_match($pattern, $value)) {
-                                    $this->addError("Введенное значение в {$item} должно быть типа {$rule_value}.");
+                                    $this->addError("Введенное загаданное значение должно быть числом.");
                                 }
                             break;
                         case 'min':
-                            if (strlen($value) < $rule_value) { //strlen($value) - кол-во символов в значении $value
-                                $this->addError("Введенное значение в {$item} должно состоять минимум из {$rule_value} символов.");
+                            if (strlen($value) < $rule_value) {
+                                $this->addError("Введенное загаданное значение должно состоять минимум из {$rule_value} символов.");
                             }
                             break;
                         case 'max':
                             if (strlen($value) > $rule_value) {
-                                $this->addError("Введенное значение в {$item} должно состоять максимум из {$rule_value} символов.");
+                                $this->addError("Введенное загаданное значение должно состоять максимум из {$rule_value} символов.");
                             }
                             break;
                     }

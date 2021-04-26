@@ -19,15 +19,17 @@
                     </div>
                 </div>
             </form>
-            <button onclick="window.location.href = '/clearSession';" class="btn btn-info btn-lg">Начать заново</button>
+            <button onclick="window.location.href = '/clearSession';" class="btn btn-info btn-lg">Обнулить прогресс</button>
         </div>
     </div>
 
 
 
 <?php $this->insert('main_table', [
+                                        'array_name_psychic' => $array_name_psychic,
                                         'name_psychic_in_HTML' => $name_psychic_in_HTML,
                                         'history_step_data_in_HTML' => $history_step_data_in_HTML,
+                                        'array_trust_psychic' => $array_trust_psychic,
                                         'trust_psychic_in_HTML' => $trust_psychic_in_HTML
                                     ]);
 ?>

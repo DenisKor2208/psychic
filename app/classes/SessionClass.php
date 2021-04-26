@@ -88,6 +88,9 @@ class SessionClass
                     'unsuccessful' => [
                         "psychic_{$i}" => 0
                     ],
+                    'attempt_current_step' => [
+                        "psychic_{$i}" => "0"
+                    ]
                 ],
                 'history' => [
                     0 => [

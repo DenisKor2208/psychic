@@ -24,7 +24,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 
     $r->addRoute('GET', '/openOnePage', ['App\classes\PageClass', 'openOnePage']);
     $r->addRoute('GET', '/openTwoPage', ['App\classes\PageClass', 'openTwoPage']);
-    $r->addRoute('GET', '/openThreePage', ['App\classes\PageClass', 'openThreePage']);
+    $r->addRoute('POST', '/openThreePage', ['App\classes\PageClass', 'openThreePage']);
 
     $r->addRoute('GET', '/clearSession', ['App\classes\PageClass', 'clearSession']);
 

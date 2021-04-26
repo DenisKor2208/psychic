@@ -17,7 +17,7 @@ class PageClass
         $this->templates = $engine;
         $this->session = $session;
         $this->validate = $validate;
-        $this->psychic = 3;
+        $this->psychic = 6;
 
         if (!$this->session::exists('user_name')) {
             $this->session->initializeData($this->psychic);
@@ -46,20 +46,34 @@ class PageClass
      */
     public function openOnePage()
     {
+        //формирование массива с именами экстрасенсов
+        $array_name_psychic = $this->namePsychicInArray();
+
         //формирование верстки для таблицы с именами экстрасенсов
-        $name_psychic_in_HTML = $this->namePsychicInHTML();
+        $name_psychic_in_HTML = $this->namePsychicInHTML($array_name_psychic);
+
+        //формирование массива с показателями доверия экстрасенсов и значения текущего шага(угадал/не угадал число пользователя в текущем шаге)
+        $array_trust_psychic = $this->trustPsychicInArray();
 
         //формирование верстки для таблицы с показателями доверия экстрасенсов
-        $trust_psychic_in_HTML = $this->trustPsychicInHTML();
+        $trust_psychic_in_HTML = $this->trustPsychicInHTML($array_trust_psychic);
+
+        //формирование массива истории результатов всех шагов
+        $array_history_step = $this->historyStepDataInArray();
 
         //формирование верстки для таблицы из истории шагов
-        $history_step_data_in_HTML = $this->historyStepDataInHTML();
+        $history_step_data_in_HTML = $this->historyStepDataInHTML($array_history_step);
+
+
 
         echo $this->templates->render('page/one_page', [
-                                                                    'name_psychic_in_HTML' => $name_psychic_in_HTML,
-                                                                    'history_step_data_in_HTML' => $history_step_data_in_HTML,
-                                                                    'trust_psychic_in_HTML' => $trust_psychic_in_HTML
-                                                                   ]);
+                  'array_name_psychic' => $array_name_psychic,
+                  'name_psychic_in_HTML' => $name_psychic_in_HTML,
+                  'array_history_step' => $array_history_step,
+                  'history_step_data_in_HTML' => $history_step_data_in_HTML,
+                  'array_trust_psychic' => $array_trust_psychic,
+                  'trust_psychic_in_HTML' => $trust_psychic_in_HTML
+        ]);
     }
 
     /**
@@ -74,22 +88,33 @@ class PageClass
         //формирование верстки с предположениями экстрасенсов
         $guesswork_psychics_in_HTML = $this->guessworkPsychicsInHTML($array_number_psychic);
 
+        //формирование массива с именами экстрасенсов
+        $array_name_psychic = $this->namePsychicInArray();
 
         //формирование верстки для таблицы с именами экстрасенсов
-        $name_psychic_in_HTML = $this->namePsychicInHTML();
+        $name_psychic_in_HTML = $this->namePsychicInHTML($array_name_psychic);
+
+        //формирование массива с показателями доверия экстрасенсов и значения текущего шага(угадал/не угадал число пользователя в текущем шаге)
+        $array_trust_psychic = $this->trustPsychicInArray();
 
         //формирование верстки для таблицы с показателями доверия экстрасенсов
-        $trust_psychic_in_HTML = $this->trustPsychicInHTML();
+        $trust_psychic_in_HTML = $this->trustPsychicInHTML($array_trust_psychic);
+
+        //формирование массива истории результатов всех шагов
+        $array_history_step = $this->historyStepDataInArray();
 
         //формирование верстки для таблицы из истории шагов
-        $history_step_data_in_HTML = $this->historyStepDataInHTML();
+        $history_step_data_in_HTML = $this->historyStepDataInHTML($array_history_step);
 
         echo $this->templates->render('page/two_page', [
-                                                                        'guesswork_psychics_in_HTML' => $guesswork_psychics_in_HTML,
-                                                                        'name_psychic_in_HTML' => $name_psychic_in_HTML,
-                                                                        'history_step_data_in_HTML' => $history_step_data_in_HTML,
-                                                                        'trust_psychic_in_HTML' => $trust_psychic_in_HTML
-                                                                    ]);
+                  'guesswork_psychics_in_HTML' => $guesswork_psychics_in_HTML,
+                  'array_name_psychic' => $array_name_psychic,
+                  'name_psychic_in_HTML' => $name_psychic_in_HTML,
+                  'array_history_step' => $array_history_step,
+                  'history_step_data_in_HTML' => $history_step_data_in_HTML,
+                  'array_trust_psychic' => $array_trust_psychic,
+                  'trust_psychic_in_HTML' => $trust_psychic_in_HTML
+        ]);
     }
 
     /**
@@ -98,8 +123,8 @@ class PageClass
     public function openThreePage()
     {
         //проверка было ли введено пользователем загаданное число
-        if (!empty($_GET['user_number'])) {
-            $this->validate->check($_GET, [
+        if (!empty($_POST['user_number'])) {
+            $this->validate->check($_POST, [
                 'user_number' => [
                     'required' => true,
                     'type' => 'integer',
@@ -116,7 +141,7 @@ class PageClass
                 $current_step++;
                 $this->session::put(['current_step' => $current_step]);
 
-                $this->formingResultsAttempts($_GET);
+                $this->formingResultsAttempts($_POST);
                 $this->formatResultsAttempt();
 
                 //записываем в историю текущего шага
@@ -124,7 +149,7 @@ class PageClass
                     'history' => [
                         $current_step => [
                             'step' => $current_step,
-                            'user_number' => $_GET['user_number']
+                            'user_number' => $_POST['user_number']
                         ]
                     ]
                 ]);
@@ -134,25 +159,37 @@ class PageClass
                         'history' => [
                             $current_step => [
                                 'result' => [
-                                    "psychic_{$i}" => $_GET["psychic_{$i}_guess"]
+                                    "psychic_{$i}" => $_POST["psychic_{$i}_guess"]
                                 ]
                             ]
                         ]
                     ]);
                 }
 
+                //формирование массива с именами экстрасенсов
+                $array_name_psychic = $this->namePsychicInArray();
+
                 //формирование верстки для таблицы с именами экстрасенсов
-                $name_psychic_in_HTML = $this->namePsychicInHTML();
+                $name_psychic_in_HTML = $this->namePsychicInHTML($array_name_psychic);
+
+                //формирование массива с показателями доверия экстрасенсов и значения текущего шага(угадал/не угадал число пользователя в текущем шаге)
+                $array_trust_psychic = $this->trustPsychicInArray();
 
                 //формирование верстки для таблицы с показателями доверия экстрасенсов
-                $trust_psychic_in_HTML = $this->trustPsychicInHTML();
+                $trust_psychic_in_HTML = $this->trustPsychicInHTML($array_trust_psychic);
+
+                //формирование массива истории результатов всех шагов
+                $array_history_step = $this->historyStepDataInArray();
 
                 //формирование верстки для таблицы из истории шагов
-                $history_step_data_in_HTML = $this->historyStepDataInHTML();
+                $history_step_data_in_HTML = $this->historyStepDataInHTML($array_history_step);
 
                 echo $this->templates->render('page/three_page', [
+                    'array_name_psychic' => $array_name_psychic,
                     'name_psychic_in_HTML' => $name_psychic_in_HTML,
+                    'array_history_step' => $array_history_step,
                     'history_step_data_in_HTML' => $history_step_data_in_HTML,
+                    'array_trust_psychic' => $array_trust_psychic,
                     'trust_psychic_in_HTML' => $trust_psychic_in_HTML
                 ]);
 
@@ -170,6 +207,7 @@ class PageClass
         }
 
     }
+
     /**
      * Запись в историю текущего шага результатов экстрасенсов в отформатированном виде
      */
@@ -228,6 +266,9 @@ class PageClass
                     'attempt' => [
                         'successful' => [
                             "psychic_{$i}" => $item_psychic_attempt_successful
+                        ],
+                        'attempt_current_step' => [
+                            "psychic_{$i}" => '+'
                         ]
                     ]
                 ]);
@@ -239,6 +280,9 @@ class PageClass
                     'attempt' => [
                         'unsuccessful' => [
                             "psychic_{$i}" => $item_psychic_attempt_unsuccessful
+                        ],
+                        'attempt_current_step' => [
+                            "psychic_{$i}" => '-'
                         ]
                     ]
                 ]);
@@ -247,20 +291,31 @@ class PageClass
     }
 
     /**
-     * Формирование верстки для таблицы с именами экстрасенсов
+     * Формирование массива с именами экстрасенсов
      */
-    private function namePsychicInHTML()
+    public function namePsychicInArray()
     {
-        //получаем текущий шаг
-        $current_step = $this->session::getDataSession('current_step');
+        $array_name_psychic = [];
 
         //получаем имена всех экстрасенсов
         $result = $this->session::getDataSession("current_name_psychic");
 
+        foreach ($result as $item) {
+            array_push($array_name_psychic, $item);
+        }
+
+        return $array_name_psychic;
+    }
+
+    /**
+     * Формирование верстки для таблицы с именами экстрасенсов
+     */
+    private function namePsychicInHTML($data = 0)
+    {
         $name_psychic_in_HTML = '';
 
         //формируем верстку с именами экстрасенсов
-        foreach ($result as $item) {
+        foreach ($data as $item) {
             $name_psychic_in_HTML .= "<th>{$item}</th>";
         }
 
@@ -269,62 +324,147 @@ class PageClass
     }
 
     /**
-     * Формирование верстки для таблицы с показателями доверия экстрасенсов
+     * Формирование массива с показателями доверия экстрасенсов и значения текущего шага(угадал/не угадал число пользователя в текущем шаге)
      */
-    private function trustPsychicInHTML()
+    public function trustPsychicInArray()
     {
+        $array_trust_psychic = [];
+
         //получаем текущий шаг
         $current_step = $this->session::getDataSession('current_step');
 
         //получаем данные по достоверности экстрасенсов
         $result = $this->session::getDataSession("history.{$current_step}.trust");
 
-        $trust_in_HTML = '';
+        $i = 1;
 
         foreach ($result as $item) {
             $item = explode('/', $item);
-            $trust_in_HTML .= "
+            $item = $item[0] - $item[1];
+
+            $array_trust_psychic["psychic_{$i}"]["difference"] = $item;
+            $array_trust_psychic["psychic_{$i}"]["attempt_current_step"] = $this->session::getDataSession("attempt.attempt_current_step.psychic_{$i}");
+
+            $i++;
+        }
+
+        return $array_trust_psychic;
+    }
+
+    /**
+     * Формирование верстки для таблицы с показателями доверия экстрасенсов
+     */
+    private function trustPsychicInHTML($data)
+    {
+        $trust_in_HTML = '';
+
+        foreach ($data as $item) {
+
+            if ($item['difference'] === 0) {
+                $trust_in_HTML .= "
                     <td>
-                        <div class='row p-1'>
-                            <div class='col bg-success'>
-                                <span class='badge pill bg-success'>{$item[0]}</span>
-                            </div> 
-                            <div class='col bg-danger'>
-                                <span class='badge pill bg-danger'>{$item[1]}</span>
-                            </div>
+                        <div class='row'>
+                            <div class='col bg-second'>
+                                <span class='fs-5 ms-1 badge pill bg-warning'>{$item['difference']}</span>
+                ";
+            } elseif ($item['difference'] < 0) {
+                $trust_in_HTML .= "
+                    <td>
+                        <div class='row'>
+                            <div class='col bg-second'>
+                                <span class='fs-5 ms-1 badge pill bg-danger'>{$item['difference']}</span>
+                ";
+            } else {
+                $trust_in_HTML .= "
+                    <td>
+                        <div class='row'>
+                            <div class='col bg-second'>
+                                <span class='fs-5 ms-1 badge pill bg-success'>{$item['difference']}</span>
+                ";
+            }
+
+            switch ($item['attempt_current_step']) {
+                case '0':
+                    $trust_in_HTML .= "
+                                <span class='fs-5 ms-1 badge pill bg-warning'>&#8597</span></div>
                         </div>
                     </td>
-            ";
+                    ";
+                    break;
+                case '+':
+                    $trust_in_HTML .= "
+                                <span class='fs-5 ms-1 badge pill bg-success'>&#8593</span></div>
+                        </div>
+                    </td>
+                    ";
+                    break;
+                case '-':
+                    $trust_in_HTML .= "
+                                <span class='fs-5 ms-1 badge pill bg-danger'>&#8595</span></div>
+                        </div>
+                    </td>
+                    ";
+                    break;
+            }
+
         }
 
         return $trust_in_HTML;
     }
 
     /**
-     * Формирование верстки для таблицы из истории шагов
+     * Формирование массива истории результатов всех шагов
      */
-    private function historyStepDataInHTML()
+    public function historyStepDataInArray()
     {
+        $array_history_step = [];
+
         //получаем историю всех шагов с результатами
         $history_step_all = $this->session::getDataSession("history");
-        $history_step_in_HTML = '';
 
         //перебираем каждый шаг из истории шагов по отдельности
         for ($i = 0; $i < count($history_step_all); $i++) {
+
             //выбираем один шаг
             $history_step_one = $history_step_all[$i];
 
-            //выбираем номер шага и вписываем его в верстку
-            $history_step_in_HTML .= "<tr class='bg-light'><th>Шаг {$history_step_one['step']}</th>";
+            //выбираем номер шага и вписываем его в массив
+            $array_history_step[$history_step_one['step']] = [
+                'step' => $history_step_one['step']
+            ];
 
-            //выбираем числовые предположения экстрасенсов и вписываем их в верстку
+            //выбираем числовые предположения экстрасенсов и вписываем их в массив
             foreach ($history_step_one['result'] as $key => $value) {
-                $history_step_in_HTML .= "<td>{$value}</td>";
+                d($key);
+                d($value);
+                $array_history_step[$history_step_one['step']]['psychics'][$key] = $value;
             }
 
-            //выбираем число пользователя и вписываем его в верстку
-            $history_step_in_HTML .= "<td>{$history_step_all[$i]['user_number']}</td></tr>";
+            //вписываем число пользователя в массив
+            $array_history_step[$history_step_one['step']]['user_number'] = $history_step_all[$i]['user_number'];
         }
+
+        return $array_history_step;
+    }
+
+    /**
+     * Формирование верстки для таблицы из истории шагов
+     */
+    private function historyStepDataInHTML($data)
+    {
+        $history_step_in_HTML = '';
+
+            foreach ($data as $key => $value) {
+
+                $history_step_in_HTML .= "<tr class='bg-light'><th>Шаг {$value['step']}</th>";
+
+                foreach ($value['psychics'] as $key_psychic => $value_psychic) {
+                    $history_step_in_HTML .= "<td>{$value_psychic}</td>";
+                }
+
+                //выбираем число пользователя и вписываем его в верстку
+                $history_step_in_HTML .= "<td>{$value['user_number']}</td></tr>";
+            }
 
         //возвращаем сформированную верстку с данными
         return $history_step_in_HTML;
