@@ -26,6 +26,10 @@ composer install
 ```
 "nikic/fast-route"
 ```
+Flash - сообщения
+```
+tamtamchik/simple-flash
+```
 DI контейнер:
 ```
 "php-di/php-di"

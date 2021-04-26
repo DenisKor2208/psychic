@@ -435,8 +435,6 @@ class PageClass
 
             //выбираем числовые предположения экстрасенсов и вписываем их в массив
             foreach ($history_step_one['result'] as $key => $value) {
-                d($key);
-                d($value);
                 $array_history_step[$history_step_one['step']]['psychics'][$key] = $value;
             }
 
